@@ -10,12 +10,16 @@ config = ConfigParser.RawConfigParser()
 if os.path.isfile('config.cfg'):
 	pass
 else:
-	config.add_section('Lastpath')
-	config.set('Lastpath', 'old', os.environ['HOME'])
-	config.set('Lastpath', 'new', os.environ['HOME'])
-	config.set('Lastpath', 'save', os.environ['HOME'])
-	with open('config.cfg', 'wb') as configfile:
-		config.write(configfile)
+    if os.name == 'posix':
+        cfgdirdef = os.environ['HOME']
+    elif os.name == 'nt':
+        cfgdirdef = os.environ['USERPROFILE']
+    config.add_section('Lastpath')
+    config.set('Lastpath', 'old', cfgdirdef)
+    config.set('Lastpath', 'new', cfgdirdef)
+    config.set('Lastpath', 'save', cfgdirdef)
+    with open('config.cfg', 'wb') as configfile:
+        config.write(configfile)
 
 APP = 'Jigsaw-patcher'
 DIR = 'locale'
